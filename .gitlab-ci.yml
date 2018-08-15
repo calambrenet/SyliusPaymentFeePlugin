@@ -57,8 +57,8 @@ test:tests:
     image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2 #TODO Create image for public
     script:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
-        - vendor/bin/phpunit
-        - vendor/bin/behat --tags="~@javascript" --strict -vvv --no-interaction || vendor/bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
+        - bin/phpunit
+        - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
     artifacts:
         when: on_failure
         paths:
@@ -67,7 +67,7 @@ test:tests:
     dependencies:
         - build:backend
 
-test:behat:
+test:selenium:
     services:
         - postgres:10-alpine
         - selenium/standalone-chrome:2.53.1
@@ -76,7 +76,7 @@ test:behat:
     script:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - (cd tests/Application && bin/console server:start 127.0.0.1:8080 -d public -e test)
-        - vendor/bin/behat --tags="@javascript" --strict -vvv --no-interaction || vendor/bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
+        - bin/behat --tags="@javascript" --strict -vvv --no-interaction || bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
     artifacts:
         when: on_failure
         paths:
