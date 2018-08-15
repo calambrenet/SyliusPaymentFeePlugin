@@ -8,4 +8,4 @@
 - Run `bin-docker/composer install`, (or just composer, if you are using direnv)
 - Develop you plugin in `/src`
 - See [.gitlab-ci.yml](.gitlab-ci.yml) and [docker-compose.yaml](docker-compose.yaml) for more info about testing
-
+- See `bin/` for useful commands
