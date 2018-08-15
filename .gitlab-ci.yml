@@ -2,18 +2,16 @@ stages:
     - build
     - test
 
-
 variables:
     SYLIUS_BUILD_DIR: etc/build
     COMPOSER_HOME: tmp/composer
     APP_ENV: test
     APP_SECRET: 2a2f0c6cf200b9b9ff6f33fceabb8643
-    DATABASE_URL: postgres://runner:runner-password@postgres:5432/test-db
+    DATABASE_URL: pgsql://runner:runner-password@localhost:5432/test-db
     MAILER_URL: null://localhost
     POSTGRES_DB: test-db
     POSTGRES_USER: runner
     POSTGRES_PASSWORD: runner-password
-
 
 build:backend:
     image: composer:1
@@ -56,9 +54,8 @@ test:tests:
     services:
         - postgres:10-alpine
     stage: test
-    image: php:7.2
+    image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2 #TODO Create image for public
     script:
-        - (cd tests/Application && bin/console doctrine:database:create --env=test -vvv)
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - vendor/bin/phpunit
         - vendor/bin/behat --tags="~@javascript" --strict -vvv --no-interaction || vendor/bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
@@ -73,11 +70,12 @@ test:tests:
 test:behat:
     services:
         - postgres:10-alpine
+        - selenium/standalone-chrome:2.53.1
     stage: test
-    image: michalhosna/sylius-selenium-behat:latest
+    image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2 #TODO Create image for public
     script:
-        - bin/selenium-server-standalone -Dwebdriver.chrome.driver=chromedriver
-        - (cd tests/Application && bin/console server:run 127.0.0.1:8080 -d public -e test)
+        - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
+        - (cd tests/Application && bin/console server:start 127.0.0.1:8080 -d public -e test)
         - vendor/bin/behat --tags="@javascript" --strict -vvv --no-interaction || vendor/bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
     artifacts:
         when: on_failure

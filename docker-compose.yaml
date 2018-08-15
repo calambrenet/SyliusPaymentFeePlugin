@@ -3,6 +3,12 @@ version: '3.7'
 x-php-service-base: &php-service-base
     restart: on-failure
     working_dir: /src
+    environment:
+        SYLIUS_BUILD_DIR: etc/build
+        APP_ENV: dev
+        APP_SECRET: 2a2f0c6cf200b9b9ff6f33fceabb8643
+        DATABASE_URL: pgsql://runner:runner-password@postgres:5432/test-db
+        MAILER_URL: null://localhost
     volumes:
         - .:/src:cached
         - ./deploy/php.ini:/usr/local/etc/php/php.ini:delegated,ro
@@ -31,5 +37,16 @@ services:
         depends_on:
             - php
 
+    postgres:
+        image: postgres:10-alpine
+        environment:
+            POSTGRES_DB: test-db
+            POSTGRES_USER: runner
+            POSTGRES_PASSWORD: runner-password
+
+    selenium:
+        image: selenium/standalone-chrome:2.53.1
+
 volumes:
     session-storage: ~
+

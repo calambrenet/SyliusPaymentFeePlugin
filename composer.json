@@ -27,7 +27,8 @@
 		"phpstan/phpstan-webmozart-assert": "^0.10",
 		"phpunit/phpunit": "^6.5",
 		"sylius-labs/coding-standard": "^2.0",
-		"se/selenium-server-standalone": "^3.12"
+		"se/selenium-server-standalone": "^3.12",
+		"symfony/templating": "^4.1"
 	},
 	"prefer-stable": true,
 	"autoload": {

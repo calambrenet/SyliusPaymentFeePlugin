@@ -11,8 +11,8 @@ default:
 
         FriendsOfBehat\SymfonyExtension:
             kernel:
-                class: AppKernel
-                path: tests/Application/app/AppKernel.php
+                class: \App\Kernel
+                path: tests/Application/src/Kernel.php
                 bootstrap: vendor/autoload.php
 
         Lakion\Behat\MinkDebugExtension:
