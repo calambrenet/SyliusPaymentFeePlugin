@@ -4,9 +4,6 @@ IFS=$'\n\t'
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$(dirname "$DIR")"
 
-# project root
-cd "$PROJECT_ROOT"
-
 if  [[ $@ == req* || $@ == ins* || $@ == up* || $@ == rem* ]] && [[ $@ != *ignore-platform-reqs* ]];
 then
     echo -e "\e[33m"
@@ -20,5 +17,5 @@ docker run -it --rm \
     -e "COMPOSER_CACHE_DIR=/var/cache/composer" \
     -v composer-cache:/var/cache/composer \
     -v "$PROJECT_ROOT":"$PROJECT_ROOT" \
-    -w "$PROJECT_ROOT" \
+    -w "$(pwd)" \
     composer:1 "$@"
