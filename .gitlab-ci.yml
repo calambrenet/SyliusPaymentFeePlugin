@@ -12,44 +12,89 @@ build:backend:
     cache:
         key: ${CI_JOB_NAME}
         paths:
+            - vendor
             - node_modules
+            - web
     script:
         - composer require "symfony/symfony:^4.1" --no-interaction --no-update
         - composer validate --strict
         - composer install --no-progress --classmap-authoritative --ignore-platform-reqs --no-interaction
         - (cd tests/Application && bin/console cache:warmup --env=test -vvv)
+        - (cd tests/Application && bin/console assets:install web --env=test -vvv)
     artifacts:
         paths:
             - vendor
             - bin
             - node_modules
-        expire_in: 1 hour
+            - tests/Application
+        expire_in: 1 hours
 
 .build:fronentd:
     image: ??
     script:
-        - (cd tests/Application && bin/console assets:install web --env=test -vvv)
         - (cd tests/Application && yarn build)
         - (cd tests/Application && yarn install)
 
 test:code:
     stage: test
-    image: php:7.2-alpine
+    image: php:7.2
     script:
-        - bin/phpstan.phar analyse -c phpstan.neon -l max src
-        - bin/ecs
+        - bin/phpstan.sh
+        - bin/ecs.sh
     dependencies:
         - build:backend
 
-
 test:tests:
     stage: test
-    image: php:7.2-alpine
-    before_script:
+    image: php:7.2
+    script:
         - (cd tests/Application && bin/console doctrine:database:create --env=test -vvv)
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
+        - vendor/bin/phpunit
+    artifacts:
+        when: on_failure
+        paths:
+            - ${SYLIUS_BUILD_DIR}/*.log
+    dependencies:
+        - build:backend
+
+test:behat:
+    stage: test
+    image: php:7.2
     script:
-        - bin/phpunit
+        # Configure display
+        - /sbin/start-stop-daemon --start --quiet --pidfile /tmp/xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1680x1050x16
+        - export DISPLAY=:99
+
+        # Download and configure ChromeDriver
+        - |
+            if [ ! -f $SYLIUS_CACHE_DIR/chromedriver ] || [ "$($SYLIUS_CACHE_DIR/chromedriver --version | grep -c 2.34)" = "0" ]; then
+                curl http://chromedriver.storage.googleapis.com/2.34/chromedriver_linux64.zip > chromedriver.zip
+                unzip chromedriver.zip
+                chmod +x chromedriver
+                mv chromedriver $SYLIUS_CACHE_DIR
+            fi
+
+        # Run ChromeDriver
+        - $SYLIUS_CACHE_DIR/chromedriver > /dev/null 2>&1 &
+
+        # Download and configure Selenium
+        - |
+            if [ ! -f $SYLIUS_CACHE_DIR/selenium.jar ] || [ "$(java -jar $SYLIUS_CACHE_DIR/selenium.jar --version | grep -c 3.4.0)" = "0" ]; then
+                curl http://selenium-release.storage.googleapis.com/3.4/selenium-server-standalone-3.4.0.jar > selenium.jar
+                mv selenium.jar $SYLIUS_CACHE_DIR
+            fi
+
+        # Run Selenium
+        - java -Dwebdriver.chrome.driver=$SYLIUS_CACHE_DIR/chromedriver -jar $SYLIUS_CACHE_DIR/selenium.jar > /dev/null 2>&1 &
+
+        # Run webserver
+        - (cd tests/Application && bin/console server:run 127.0.0.1:8080 -d web --env=test --quiet > /dev/null 2>&1 &)
+
+        - (cd tests/Application && bin/console doctrine:database:create --env=test -vvv)
+        - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
+
+        - bin/behat --strict -vvv --no-interaction || bin/behat --strict -vvv --no-interaction --rerun
     artifacts:
         when: on_failure
         paths:
