@@ -7,6 +7,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$(dirname "$DIR")"
 
 set -x
+tests/Application/bin/console --env=test cache:warmup
 vendor/bin/phpstan analyse \
 	--level 6 \
 	--memory-limit 1G \

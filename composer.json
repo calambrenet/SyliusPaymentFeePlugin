@@ -35,8 +35,8 @@
 		}
 	},
 	"autoload-dev": {
-		"classmap": [
-			"tests/Application/app/AppKernel.php"
-		]
+		"psr-4": {
+			"App\\": "tests/Application/src/"
+		}
 	}
 }
