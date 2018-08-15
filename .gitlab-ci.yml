@@ -6,6 +6,8 @@ stages:
 variables:
     SYLIUS_BUILD_DIR: etc/build
     COMPOSER_HOME: tmp/composer
+    APP_ENV: test
+    APP_SECRET: 2a2f0c6cf200b9b9ff6f33fceabb8643
 
 build:backend:
     image: composer:1
@@ -21,7 +23,7 @@ build:backend:
         - composer validate --strict
         - composer install --no-progress --classmap-authoritative --ignore-platform-reqs --no-interaction
         - (cd tests/Application && bin/console cache:warmup --env=test -vvv)
-        - (cd tests/Application && bin/console assets:install web --env=test -vvv)
+        - (cd tests/Application && bin/console assets:install public --env=test -vvv)
     artifacts:
         paths:
             - vendor
@@ -90,7 +92,7 @@ test:behat:
         - java -Dwebdriver.chrome.driver=$SYLIUS_CACHE_DIR/chromedriver -jar $SYLIUS_CACHE_DIR/selenium.jar > /dev/null 2>&1 &
 
         # Run webserver
-        - (cd tests/Application && bin/console server:run 127.0.0.1:8080 -d web --env=test --quiet > /dev/null 2>&1 &)
+        - (cd tests/Application && bin/console server:run 127.0.0.1:8080 -d public --env=test --quiet > /dev/null 2>&1 &)
 
         - (cd tests/Application && bin/console doctrine:database:create --env=test -vvv)
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
