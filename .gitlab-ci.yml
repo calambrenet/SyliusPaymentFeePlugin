@@ -6,7 +6,7 @@ stages:
 variables:
     SYLIUS_BUILD_DIR: etc/build
 
-.build:backend: &buildBackend
+build:backend:
     image: composer:1
     stage: build
     cache:
@@ -14,12 +14,10 @@ variables:
         paths:
             - node_modules
     script:
+        - composer require "symfony/symfony:^4.1" --no-interaction --no-update
         - composer validate --strict
         - composer install --no-progress --classmap-authoritative --ignore-platform-reqs --no-interaction
-        - (cd tests/Application && bin/console assets:install web --env=test -vvv)
         - (cd tests/Application && bin/console cache:warmup --env=test -vvv)
-        - (cd tests/Application && yarn build)
-        - (cd tests/Application && yarn install)
     artifacts:
         paths:
             - vendor
@@ -27,24 +25,24 @@ variables:
             - node_modules
         expire_in: 1 hour
 
-build:3.4:backend:
-    <<: *buildBackend
-    before_script:
-        - composer require "symfony/symfony:^3.4" --no-interaction --no-update
+.build:fronentd:
+    image: ??
+    script:
+        - (cd tests/Application && bin/console assets:install web --env=test -vvv)
+        - (cd tests/Application && yarn build)
+        - (cd tests/Application && yarn install)
 
-build:4.1:backend:
-    <<: *buildBackend
-    before_script:
-        - composer require "symfony/symfony:^4.1" --no-interaction --no-update
-
-test:3.4:code:
+test:code:
     stage: test
     image: php:7.2-alpine
     script:
         - bin/phpstan.phar analyse -c phpstan.neon -l max src
         - bin/ecs
+    dependencies:
+        - build:backend
 
-test:3.4:tests:
+
+test:tests:
     stage: test
     image: php:7.2-alpine
     before_script:
@@ -52,10 +50,9 @@ test:3.4:tests:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
     script:
         - bin/phpunit
-    dependencies:
-        - build:3.4:backend
-
     artifacts:
         when: on_failure
         paths:
             - ${SYLIUS_BUILD_DIR}/*.log
+    dependencies:
+        - build:backend
