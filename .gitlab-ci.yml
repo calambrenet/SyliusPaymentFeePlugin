@@ -15,7 +15,6 @@ build:backend:
         paths:
             - vendor
             - node_modules
-            - web
             - ${COMPOSER_HOME}
     script:
         - composer require "symfony/symfony:^4.1" --no-interaction --no-update
@@ -26,7 +25,6 @@ build:backend:
     artifacts:
         paths:
             - vendor
-            - bin
             - node_modules
             - tests/Application
         expire_in: 1 hours
@@ -53,6 +51,7 @@ test:tests:
         - (cd tests/Application && bin/console doctrine:database:create --env=test -vvv)
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - vendor/bin/phpunit
+        - vendor/bin/behat --tags="~@javascript"
     artifacts:
         when: on_failure
         paths:

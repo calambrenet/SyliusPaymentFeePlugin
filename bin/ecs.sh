@@ -7,4 +7,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$(dirname "$DIR")"
 
 set -x
+
+rm -rf tests/Application/var/cache/
 vendor/bin/ecs check src tests "$@"

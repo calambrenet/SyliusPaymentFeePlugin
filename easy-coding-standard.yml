@@ -1,2 +1,8 @@
 imports:
     - { resource: 'vendor/sylius-labs/coding-standard/easy-coding-standard.yml' }
+
+parameters:
+    indentation: tab
+
+    skip:
+
