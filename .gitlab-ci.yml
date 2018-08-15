@@ -60,9 +60,9 @@ test:tests:
         - bin/phpunit
         - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
     artifacts:
-        when: on_failure
+        when: always
         paths:
-            - ${SYLIUS_BUILD_DIR}/*.log
+            - ${SYLIUS_BUILD_DIR}
             - tests/Application/var/log
     dependencies:
         - build:backend
@@ -77,10 +77,12 @@ test:selenium:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - (cd tests/Application && bin/console server:start 127.0.0.1:8080 -d public -e test)
         - bin/behat --tags="@javascript" --strict -vvv --no-interaction || bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
+    after_script:
+        - (cd tests/Application && bin/console server:stop)
     artifacts:
-        when: on_failure
+        when: always
         paths:
-            - ${SYLIUS_BUILD_DIR}/*.log
+            - ${SYLIUS_BUILD_DIR}
             - tests/Application/var/log
     dependencies:
         - build:backend
