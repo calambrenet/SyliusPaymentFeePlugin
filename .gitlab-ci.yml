@@ -5,6 +5,7 @@ stages:
 
 variables:
     SYLIUS_BUILD_DIR: etc/build
+    COMPOSER_HOME: tmp/composer
 
 build:backend:
     image: composer:1
@@ -15,6 +16,7 @@ build:backend:
             - vendor
             - node_modules
             - web
+            - ${COMPOSER_HOME}
     script:
         - composer require "symfony/symfony:^4.1" --no-interaction --no-update
         - composer validate --strict
