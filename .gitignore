@@ -7,3 +7,5 @@
 !/etc/build/.gitkeep
 
 /tests/Application/yarn.lock
+
+docker-compose.override.yaml

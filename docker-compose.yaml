@@ -1,0 +1,35 @@
+version: '3.7'
+
+x-php-service-base: &php-service-base
+    restart: on-failure
+    working_dir: /src
+    volumes:
+        - .:/src:cached
+        - ./deploy/php.ini:/usr/local/etc/php/php.ini:delegated,ro
+        - ./docker/php/session.ini:/usr/local/etc/php/conf.d/session.ini:delegated,ro
+
+services:
+    php:
+        <<: *php-service-base
+        image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/php:7.2
+
+    php-xdebug:
+        <<: *php-service-base
+        build: docker/php/xdebug
+        environment:
+            PHP_IDE_CONFIG: "serverName=local-docker"
+
+    nginx:
+        image: 831119889470.dkr.ecr.eu-central-1.amazonaws.com/mangoweb/nginx:1.16
+        restart: on-failure
+        volumes:
+            - .:/src:cached
+
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:delegated,ro
+            - ./docker/nginx/location-php-xdebug.conf:/etc/nginx/location-php.conf:delegated,ro
+            - ./docker/nginx/fpm-upstream.conf:/etc/nginx/fpm-upstream.conf:delegated,ro
+        depends_on:
+            - php
+
+volumes:
+    session-storage: ~
