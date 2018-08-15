@@ -1,4 +1,5 @@
+sylius:
+    resource: "../../../vendor/sylius/sylius/app/config/routing.yml"
+
 acme_example_plugin:
     resource: '@AcmeSyliusExamplePlugin/Resources/config/shop_routing.yml'
-
-
