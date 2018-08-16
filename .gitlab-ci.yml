@@ -57,8 +57,8 @@ build:fronentd:
         paths:
             - tests/Application/node_modules
     script:
-        - (cd tests/Application && yarn install)
-        - (cd tests/Application && yarn build)
+        - (cd tests/Application && yarn install --production=false)
+        - (cd tests/Application && yarn run gulp)
     artifacts:
         paths:
             - tests/Application/node_modules
