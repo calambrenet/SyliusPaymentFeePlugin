@@ -6,3 +6,15 @@ imports:
 
 parameters:
     secret: '%kernel.secret%'
+
+liip_imagine:
+    loaders:
+        default:
+            filesystem:
+                data_root: "%kernel.project_dir%/public/media/image"
+
+knp_gaufrette:
+    adapters:
+        sylius_image:
+            local:
+                directory: "%kernel.project_dir%/public/media/image"

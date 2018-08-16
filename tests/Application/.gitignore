@@ -13,3 +13,13 @@
 ###> symfony/web-server-bundle ###
 /.web-server-pid
 ###< symfony/web-server-bundle ###
+
+/node_modules/
+
+/public/*
+!/public/assets/.gitkeep
+!/public/bundles/.gitkeep
+!/public/media/image/.gitkeep
+!/public/app.php
+!/public/app_dev.php
+!/public/app_test.php

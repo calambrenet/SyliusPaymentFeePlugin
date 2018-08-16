@@ -20,7 +20,6 @@ build:backend:
         key: ${CI_JOB_NAME}
         paths:
             - vendor
-            - node_modules
             - ${COMPOSER_HOME}
     script:
         - composer require "symfony/symfony:^4.1" --no-interaction --no-update
@@ -32,14 +31,23 @@ build:backend:
         paths:
             - vendor
             - node_modules
-            - tests/Application
+            - tests/Application/var
         expire_in: 1 hours
 
-.build:fronentd:
-    image: ??
+build:fronentd:
+    image: mangoweb/sylius-frontend-builder:0.1
+    stage: build
+    cache:
+        key: ${CI_JOB_NAME}
+        paths:
+            - tests/Application/node_modules
     script:
-        - (cd tests/Application && yarn build)
         - (cd tests/Application && yarn install)
+        - (cd tests/Application && yarn build)
+    artifacts:
+        paths:
+            - tests/Application/node_modules
+        expire_in: 1 hours
 
 test:code:
     stage: test
@@ -49,6 +57,7 @@ test:code:
         - bin/ecs.sh
     dependencies:
         - build:backend
+        - build:fronentd
 
 test:tests:
     services:
@@ -86,3 +95,4 @@ test:selenium:
             - tests/Application/var/log
     dependencies:
         - build:backend
+        - build:fronentd
