@@ -1,5 +1,6 @@
 stages:
-    - build
+    - build:backend
+    - build:fronentd
     - test
 
 variables:
@@ -30,7 +31,7 @@ variables:
 
 build:backend:
     image: composer:1
-    stage: build
+    stage: build:backend
     cache:
         key: ${CI_JOB_NAME}
         paths:
@@ -51,7 +52,7 @@ build:backend:
 
 build:fronentd:
     image: mangoweb/sylius-frontend-builder:0.1
-    stage: build
+    stage: build:fronentd
     cache:
         key: ${CI_JOB_NAME}
         paths:
@@ -63,6 +64,8 @@ build:fronentd:
         paths:
             - tests/Application/node_modules
         expire_in: 1 hours
+    dependencies:
+        - build:backend
 
 test:code:
     stage: test
