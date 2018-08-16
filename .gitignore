@@ -1,5 +1,3 @@
-/bin/*
-!/bin/.gitkeep
 
 /vendor/
 /node_modules/
@@ -9,3 +7,5 @@
 !/etc/build/.gitkeep
 
 /tests/Application/yarn.lock
+
+docker-compose.override.yaml

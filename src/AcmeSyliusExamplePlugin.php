@@ -9,5 +9,5 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 final class AcmeSyliusExamplePlugin extends Bundle
 {
-    use SyliusPluginTrait;
+	use SyliusPluginTrait;
 }

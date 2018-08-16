@@ -9,14 +9,14 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 final class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder(): TreeBuilder
-    {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('acme_sylius_example_plugin');
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getConfigTreeBuilder(): TreeBuilder
+	{
+		$treeBuilder = new TreeBuilder();
+		$rootNode = $treeBuilder->root('acme_sylius_example_plugin');
 
-        return $treeBuilder;
-    }
+		return $treeBuilder;
+	}
 }
