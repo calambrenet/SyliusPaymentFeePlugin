@@ -10,6 +10,21 @@ x-php-service-base: &php-service-base
         DATABASE_URL: pgsql://runner:runner-password@postgres:5432/test-db
         MAILER_URL: null://localhost
         PHP_IDE_CONFIG: "serverName=local-docker"
+        BEHAT_PARAMS: |
+            {
+                    "extensions": {
+                        "Behat\\MinkExtension": {
+                            "sessions": {
+                                "chrome": {
+                                    "selenium2": {
+                                        "wd_host": "http://selenium:4444/wd/hub"
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+            }
     volumes:
         - .:/src:cached
         - ./deploy/php.ini:/usr/local/etc/php/php.ini:delegated,ro

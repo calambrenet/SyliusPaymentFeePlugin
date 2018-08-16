@@ -12,6 +12,21 @@ variables:
     POSTGRES_DB: test-db
     POSTGRES_USER: runner
     POSTGRES_PASSWORD: runner-password
+    BEHAT_PARAMS: |
+        {
+            "extensions": {
+                "Behat\\MinkExtension": {
+                    "sessions": {
+                        "chrome": {
+                            "selenium2": {
+                                "wd_host": "http://selenium:4444/wd/hub"
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
 
 build:backend:
     image: composer:1
@@ -67,7 +82,7 @@ test:tests:
     script:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - bin/phpunit
-        - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
+        - bin/behat --tags="~@javascript" --strict --profile ci -vvv --no-interaction || bin/behat --tags="~@javascript" --strict --profile ci -vvv --no-interaction --rerun
     artifacts:
         when: always
         paths:
@@ -85,7 +100,8 @@ test:selenium:
     script:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - (cd tests/Application && bin/console server:start 127.0.0.1:8080 -d public -e test)
-        - bin/behat --tags="@javascript" --strict -vvv --no-interaction || bin/behat --tags="@javascript" --strict -vvv --no-interaction --rerun
+        - bin/behat --tags="@javascript" --strict --profile ci -vvv --no-interaction || bin/behat --tags="@javascript" --strict --profile ci -vvv --no-interaction --rerun
+        - (cd tests/Application && bin/console server:stop)
     after_script:
         - (cd tests/Application && bin/console server:stop)
     artifacts:
