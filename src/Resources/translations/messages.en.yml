@@ -1,0 +1,17 @@
+sylius:
+    ui:
+        payment_charges: Payment charges
+    form:
+        payment_method:
+            calculator: Calculator
+
+mango-sylius:
+    form:
+        payment_calculator:
+            flat_rate_configuration:
+                label: Flat rate
+                amount: Amount
+
+mango:
+    ui:
+        paymentFee_total: Payment fees total
