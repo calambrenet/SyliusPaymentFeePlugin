@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
 
@@ -8,13 +10,13 @@ final class FreeCalculator implements CalculatorInterface
 {
 	/**
 	 * {@inheritdoc}
+	 *
 	 * @throws \Sylius\Component\Core\Exception\MissingChannelConfigurationException
 	 */
 	public function calculate(BasePaymentInterface $subject, array $configuration): ?int
 	{
 		return null;
 	}
-
 
 	/**
 	 * {@inheritdoc}

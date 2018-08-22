@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
 
@@ -11,6 +13,7 @@ final class FlatRateCalculator implements CalculatorInterface
 {
 	/**
 	 * {@inheritdoc}
+	 *
 	 * @throws \Sylius\Component\Core\Exception\MissingChannelConfigurationException
 	 */
 	public function calculate(BasePaymentInterface $subject, array $configuration): ?int
@@ -33,7 +36,6 @@ final class FlatRateCalculator implements CalculatorInterface
 
 		return (int) $configuration[$channelCode]['amount'];
 	}
-
 
 	/**
 	 * {@inheritdoc}

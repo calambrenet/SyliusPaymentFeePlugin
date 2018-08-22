@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Form\Extension;
 
@@ -16,7 +18,6 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
-
 class PaymentMethodTypeExtension extends AbstractTypeExtension
 {
 	/**
@@ -29,7 +30,6 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 	 */
 	private $formTypeRegistry;
 
-
 	public function __construct(
 		ServiceRegistryInterface $calculatorRegistry,
 		FormTypeRegistryInterface $formTypeRegistry
@@ -37,7 +37,6 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$this->calculatorRegistry = $calculatorRegistry;
 		$this->formTypeRegistry = $formTypeRegistry;
 	}
-
 
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
@@ -85,7 +84,6 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$builder->setAttribute('prototypes', $prototypes);
 	}
 
-
 	private function addConfigurationField(FormInterface $form, string $calculatorName): void
 	{
 		$calculator = $this->calculatorRegistry->get($calculatorName);
@@ -99,7 +97,6 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$form->add('calculatorConfiguration', $this->formTypeRegistry->get($calculatorType, 'default'));
 	}
 
-
 	public function buildView(FormView $view, FormInterface $form, array $options): void
 	{
 		$view->vars['prototypes'] = [];
@@ -110,9 +107,8 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		}
 	}
 
-
 	/**
-	 * @inheritdoc
+	 * {@inheritdoc}
 	 */
 	public function getExtendedType()
 	{

@@ -1,7 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
-
 
 use Sylius\Component\Payment\Model\PaymentInterface;
 

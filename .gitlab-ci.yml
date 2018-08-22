@@ -84,7 +84,7 @@ test:tests:
     script:
         - (cd tests/Application && bin/console doctrine:schema:create --env=test -vvv)
         - bin/phpunit
-        - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
+       # - bin/behat --tags="~@javascript" --strict -vvv --no-interaction || bin/behat --tags="~@javascript" --strict -vvv --no-interaction --rerun
     artifacts:
         when: always
         paths:

@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Form\Type\Calculator;
 
@@ -6,7 +8,6 @@ use Sylius\Bundle\CoreBundle\Form\Type\ChannelCollectionType;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 
 final class ChannelBasedFlatRateConfigurationType extends AbstractType
 {
@@ -27,7 +28,6 @@ final class ChannelBasedFlatRateConfigurationType extends AbstractType
 		);
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -35,7 +35,6 @@ final class ChannelBasedFlatRateConfigurationType extends AbstractType
 	{
 		return ChannelCollectionType::class;
 	}
-
 
 	/**
 	 * {@inheritdoc}

@@ -1,7 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model;
-
 
 use MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface;
 use Sylius\Component\Core\Model\OrderInterface;
@@ -22,7 +23,6 @@ final class PaymentChargesProcessor implements OrderProcessorInterface
 	 */
 	private $paymentChargesCalculator;
 
-
 	/**
 	 * @param FactoryInterface $adjustmentFactory
 	 * @param DelegatingCalculatorInterface $paymentChargesCalculator
@@ -34,7 +34,6 @@ final class PaymentChargesProcessor implements OrderProcessorInterface
 		$this->adjustmentFactory = $adjustmentFactory;
 		$this->paymentChargesCalculator = $paymentChargesCalculator;
 	}
-
 
 	public function process(BaseOrderInterface $order): void
 	{

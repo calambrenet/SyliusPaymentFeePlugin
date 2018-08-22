@@ -1,11 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model\Calculator;
 
 use MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface;
 use Sylius\Component\Payment\Model\PaymentInterface;
 use Sylius\Component\Registry\ServiceRegistryInterface;
-
 
 final class DelegatingCalculator implements DelegatingCalculatorInterface
 {
@@ -14,12 +15,10 @@ final class DelegatingCalculator implements DelegatingCalculatorInterface
 	 */
 	private $registry;
 
-
 	public function __construct(ServiceRegistryInterface $registry)
 	{
 		$this->registry = $registry;
 	}
-
 
 	/**
 	 * {@inheritdoc}

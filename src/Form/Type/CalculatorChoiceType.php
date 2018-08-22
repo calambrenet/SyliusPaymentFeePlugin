@@ -1,11 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 
 final class CalculatorChoiceType extends AbstractType
 {
@@ -14,7 +15,6 @@ final class CalculatorChoiceType extends AbstractType
 	 */
 	private $calculators;
 
-
 	/**
 	 * @param array $calculators
 	 */
@@ -22,7 +22,6 @@ final class CalculatorChoiceType extends AbstractType
 	{
 		$this->calculators = $calculators;
 	}
-
 
 	/**
 	 * {@inheritdoc}
@@ -36,7 +35,6 @@ final class CalculatorChoiceType extends AbstractType
 		;
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -44,7 +42,6 @@ final class CalculatorChoiceType extends AbstractType
 	{
 		return ChoiceType::class;
 	}
-
 
 	/**
 	 * {@inheritdoc}

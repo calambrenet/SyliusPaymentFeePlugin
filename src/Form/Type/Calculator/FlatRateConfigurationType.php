@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Form\Type\Calculator;
 
@@ -8,7 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
-
 
 class FlatRateConfigurationType extends AbstractType
 {
@@ -26,7 +27,6 @@ class FlatRateConfigurationType extends AbstractType
 			);
 	}
 
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -40,7 +40,6 @@ class FlatRateConfigurationType extends AbstractType
 			->setRequired('currency')
 			->setAllowedTypes('currency', 'string');
 	}
-
 
 	/**
 	 * {@inheritdoc}

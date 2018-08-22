@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace MangoSylius\PaymentFeePlugin\Model;
 
 use Sylius\Component\Payment\Model\PaymentMethodInterface;
-
 
 interface PaymentMethodWithFeeInterface extends PaymentMethodInterface
 {
