@@ -70,7 +70,10 @@ build:fronentd:
 test:code:
     stage: test
     image: php:7.2
+    variables:
+        APP_ENV: dev
     script:
+        - (cd tests/Application && php -dmemory_limit=1G bin/console cache:warmup --env=dev)
         - bin/phpstan.sh
         - bin/ecs.sh
     dependencies:
