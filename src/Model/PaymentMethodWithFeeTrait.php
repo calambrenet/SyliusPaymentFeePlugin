@@ -32,7 +32,7 @@ trait PaymentMethodWithFeeTrait
 
 	public function getCalculatorConfiguration(): array
 	{
-		return $this->calculatorConfiguration;
+		return $this->calculatorConfiguration ?? [];
 	}
 
 	public function setCalculatorConfiguration(array $calculatorConfiguration)
