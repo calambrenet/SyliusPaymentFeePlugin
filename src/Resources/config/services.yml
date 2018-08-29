@@ -1,71 +1,80 @@
 services:
     _defaults:
-        autowire: true
-        autoconfigure: true
-        public: true
+        autowire: false
+        autoconfigure: false
+        public: false
 
-    Sylius\Component\Channel\Context\ChannelContextInterface: "@sylius.context.channel.cached"
-    MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface: '@MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator'
+    Sylius\Component\Channel\Context\ChannelContextInterface: '@sylius.context.channel.cached'
     MangoSylius\PaymentFeePlugin\Form\Type\Calculator\FlatRateConfigurationType: ~
+    MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculatorInterface: '@MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator'
 
     MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator:
         arguments:
-            $registry: '@mango-sylius.registry.payment_calculator'
+            $registry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
+
+#    mango_sylius.payment_fee_plugin.payment_fee_calculator:
+#         class: MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator
+#         arguments:
+#            $registry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
 
     MangoSylius\PaymentFeePlugin\Form\Type\CalculatorChoiceType:
         arguments:
-            $calculators: '%mango-sylius.payment_fee_calculators%'
+            $calculators: '%mango_sylius.payment_fee_plugin.payment_fee_calculators%'
         tags:
-            - {name: form.type}
+            - name: form.type
 
     MangoSylius\PaymentFeePlugin\Form\Extension\PaymentMethodTypeExtension:
         arguments:
-            $calculatorRegistry: "@mango-sylius.registry.payment_calculator"
-            $formTypeRegistry: "@mango-sylius.form_registry.payment_calculator"
+            $calculatorRegistry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
+            $formTypeRegistry: '@mango_sylius.payment_fee_plugin.form_registry.payment_calculator'
         tags:
-            - { name: form.type_extension, extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType }
+            - extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodType
+              name: form.type_extension
 
     MangoSylius\PaymentFeePlugin\Form\Extension\PaymentMethodChoiceTypeExtension:
         arguments:
-            $calculatorRegistry: "@mango-sylius.registry.payment_calculator"
+            $calculatorRegistry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
         tags:
-            - { name: form.type_extension, extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodChoiceType }
+            - name: form.type_extension
+              extended_type: Sylius\Bundle\PaymentBundle\Form\Type\PaymentMethodChoiceType
 
-    mango-sylius.registry.payment_calculator:
+    mango_sylius.payment_fee_plugin.registry.payment_calculator:
         class: Sylius\Component\Registry\ServiceRegistry
         arguments:
-            $className: MangoSylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface
             $context: payment fee calculator
+            $className: MangoSylius\PaymentFeePlugin\Model\Calculator\CalculatorInterface
 
-    mango-sylius.form_registry.payment_calculator:
+    mango_sylius.payment_fee_plugin.form_registry.payment_calculator:
         class: Sylius\Bundle\ResourceBundle\Form\Registry\FormTypeRegistry
-
-
-    mango-sylius.payment_fee_calculator:
-        class: MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator
-        arguments:
-            $registry: "@mango-sylius.registry.payment_calculator"
 
     MangoSylius\PaymentFeePlugin\Model\Calculator\FlatRateCalculator:
         tags:
-            - {name: mango-sylius.payment_fee_calculator, calculator: flat_rate, form_type: "MangoSylius\\PaymentFeePlugin\\Form\\Type\\Calculator\\ChannelBasedFlatRateConfigurationType", label: "mango-sylius.form.payment_calculator.flat_rate_configuration.label"}
+            - calculator: flat_rate
+              form_type: MangoSylius\PaymentFeePlugin\Form\Type\Calculator\ChannelBasedFlatRateConfigurationType
+              label: 'mango-sylius.form.payment_calculator.flat_rate_configuration.label'
+              name: MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator
 
     MangoSylius\PaymentFeePlugin\Model\PaymentChargesProcessor:
         arguments:
-            $adjustmentFactory: "@sylius.factory.adjustment"
+            $adjustmentFactory: '@sylius.factory.adjustment'
+            $paymentChargesCalculator: '@MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator'
         tags:
-            - {name: sylius.order_processor, priotiry: 0}
+            - name: sylius.order_processor
+              priotiry: 0
 
-    sylius.order_processing.order_payment_processor.checkout:
+    mango_sylius.payment_fee_plugin.order_processing.order_payment_processor.checkout:
         class: Sylius\Component\Core\OrderProcessing\OrderPaymentProcessor
         arguments:
-            - "@sylius.order_payment_provider"
+            - '@sylius.order_payment_provider'
         tags:
-            - {name: sylius.order_processor, priotiry: 5}
+            - name: sylius.order_processor
+              priotiry: 5
 
-    app.block_event_listener.admin.layout.javascripts:
+    mango_sylius.payment_fee_plugin.block_event_listener.admin.layout.javascripts:
         class: Sylius\Bundle\UiBundle\Block\BlockEventListener
         arguments:
             - '@@MangoSyliusPaymentFeePlugin/Admin/_javascripts.html.twig'
         tags:
-            - { name: kernel.event_listener, event: sonata.block.event.sylius.admin.layout.javascripts, method: onBlockEvent }
+            - event: sonata.block.event.sylius.admin.layout.javascripts
+              method: onBlockEvent
+              name: kernel.event_listener

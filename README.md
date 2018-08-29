@@ -1,15 +1,14 @@
 To use:
 =======
-- Add `$bundles[] = new \MangoSylius\PaymentFeePlugin\MangoSyliusPaymentFeePlugin();` to AppKernel.php
-- In AppBundle create `PaymentMethod` class that implements `\MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`
-and use Trait `MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`.
-- Do database migration dou to new fields. 
+- Add `\MangoSylius\PaymentFeePlugin\MangoSyliusPaymentFeePlugin()` to AppKernel.php
+- Your Entity `PaymentMethod` has to implement `\MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
+- For guide to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.2/customization/model.html) 
 
 ### Admin
 - Add 
 ```twig
 <div class="ui segment">
-	<h4 class="ui dividing header">{{ 'sylius.ui.payment_charges'|trans }}</h4>
+	<h4 class="ui dividing header">{{ 'mango-sylius.ui.payment_charges'|trans }}</h4>
 	{{ form_row(form.calculator) }}
 	{% for name, calculatorConfigurationPrototype in form.vars.prototypes %}
 		<div id="{{ form.calculator.vars.id }}_{{ name }}" data-container=".calculatorConfiguration"
@@ -59,9 +58,21 @@ Add this to `AdminBundle/Resources/views/Order/Show/Summary/_totals.html.twig`.
 
 		</td>
 		<td colspan="4" id="paymentFee-total" class="right aligned">
-			<strong>{{ 'mango.ui.paymentFee_total'|trans }}</strong>:
+			<strong>{{ 'mango-sylius.ui.paymentFee_total'|trans }}</strong>:
 			{{ money.format(order.getAdjustmentsTotal(paymentFeeAdjustment) ,order.currencyCode) }}
 		</td>
 	</tr>
 {% endif %}
 ```
+
+### Development
+
+#### Usage (docker-only)
+
+- Create symlink from .env.dist to .env or create your own .env file
+- Use php and composer from bin-docker (You can use [direnv](https://direnv.net) to add it into path)
+- Run `bin-docker/composer install`, (or just composer, if you are using direnv)
+- Develop you plugin in `/src`
+- See [.gitlab-ci.yml](.gitlab-ci.yml) and [docker-compose.yaml](docker-compose.yaml) for more info about testing
+- See `bin/` for useful commands
+
