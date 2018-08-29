@@ -42,6 +42,10 @@ class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 				throw new UnexpectedTypeException($method, PaymentMethodWithFeeInterface::class);
 			}
 
+			if ($method->getCalculator() === null) {
+				throw new \ErrorException('$method->getCalculator() cannot by NULL');
+			}
+
 			$calculator = $this->calculatorRegistry->get($method->getCalculator());
 			assert($calculator instanceof CalculatorInterface);
 

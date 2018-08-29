@@ -12,11 +12,6 @@ services:
         arguments:
             $registry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
 
-#    mango_sylius.payment_fee_plugin.payment_fee_calculator:
-#         class: MangoSylius\PaymentFeePlugin\Model\Calculator\DelegatingCalculator
-#         arguments:
-#            $registry: '@mango_sylius.payment_fee_plugin.registry.payment_calculator'
-
     MangoSylius\PaymentFeePlugin\Form\Type\CalculatorChoiceType:
         arguments:
             $calculators: '%mango_sylius.payment_fee_plugin.payment_fee_calculators%'

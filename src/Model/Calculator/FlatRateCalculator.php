@@ -23,13 +23,17 @@ final class FlatRateCalculator implements CalculatorInterface
 		$order = $subject->getOrder();
 		assert($order instanceof OrderInterface);
 
+		if ($order->getChannel() === null) {
+			throw new \ErrorException('$order->getChannel() cannot by NULL');
+		}
+
 		$channelCode = $order->getChannel()->getCode();
 
 		if (!isset($configuration[$channelCode])) {
 			throw new MissingChannelConfigurationException(sprintf(
 					'Channel %s has no amount defined for shipping method %s',
 					$order->getChannel()->getName(),
-					$subject->getMethod()->getName()
+					$subject->getMethod() !== null ? $subject->getMethod()->getName() : 'null'
 				)
 			);
 		}

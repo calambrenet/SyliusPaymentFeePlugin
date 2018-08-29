@@ -19,6 +19,10 @@ final class ChannelBasedFlatRateConfigurationType extends AbstractType
 		$resolver->setDefaults([
 				'entry_type' => FlatRateConfigurationType::class,
 				'entry_options' => function (ChannelInterface $channel): array {
+					if ($channel->getBaseCurrency() === null) {
+						throw new \ErrorException('$channel->getBaseCurrency() cannot by NULL');
+					}
+
 					return [
 						'label' => $channel->getName(),
 						'currency' => $channel->getBaseCurrency()->getCode(),

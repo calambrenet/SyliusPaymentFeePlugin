@@ -51,15 +51,16 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 				if ($method === null || $method->getId() === null) {
 					return;
 				}
-				assert($method instanceof PaymentMethodWithFeeInterface);
 
-				$this->addConfigurationField($event->getForm(), $method->getCalculator());
+				if ($method instanceof PaymentMethodWithFeeInterface && $method->getCalculator() !== null) {
+					$this->addConfigurationField($event->getForm(), $method->getCalculator());
+				}
 			}
 			)
 			->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
 				$data = $event->getData();
 
-				if (empty($data) || !array_key_exists('calculator', $data)) {
+				if (!is_array($data) || empty($data) || !array_key_exists('calculator', $data)) {
 					return;
 				}
 

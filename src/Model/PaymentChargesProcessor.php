@@ -53,8 +53,8 @@ final class PaymentChargesProcessor implements OrderProcessorInterface
 
 			$adjustment->setType(AdjustmentInterface::PAYMENT_ADJUSTMENT);
 			$adjustment->setAmount($paymentCharge);
-			$adjustment->setLabel($payment->getMethod()->getName());
-			$adjustment->setOriginCode($payment->getMethod()->getCode());
+			$adjustment->setLabel($payment->getMethod() !== null ? $payment->getMethod()->getName() : null);
+			$adjustment->setOriginCode($payment->getMethod() !== null ? $payment->getMethod()->getCode() : null);
 			$adjustment->setNeutral(false);
 
 			$order->addAdjustment($adjustment);

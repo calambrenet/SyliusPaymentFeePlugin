@@ -1,12 +1,14 @@
 To use:
 =======
-- Add `\MangoSylius\PaymentFeePlugin\MangoSyliusPaymentFeePlugin()` to AppKernel.php
+- Register `\MangoSylius\PaymentFeePlugin\MangoSyliusPaymentFeePlugin()` in your Kernel
 - Your Entity `PaymentMethod` has to implement `\MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeInterface`. You can use Trait `MangoSylius\PaymentFeePlugin\Model\PaymentMethodWithFeeTrait`. 
 - For guide to use your own entity see [Sylius docs - Customizing Models](https://docs.sylius.com/en/1.2/customization/model.html) 
 
 ### Admin
 - Add 
+
 ```twig
+
 <div class="ui segment">
 	<h4 class="ui dividing header">{{ 'mango-sylius.ui.payment_charges'|trans }}</h4>
 	{{ form_row(form.calculator) }}
