@@ -43,7 +43,9 @@ class PaymentMethodChoiceTypeExtension extends AbstractTypeExtension
 			}
 
 			if ($method->getCalculator() === null) {
-				throw new \ErrorException('$method->getCalculator() cannot by NULL');
+				$paymentCosts[$choiceView->value] = 0;
+
+				continue;
 			}
 
 			$calculator = $this->calculatorRegistry->get($method->getCalculator());
