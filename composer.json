@@ -1,5 +1,5 @@
 {
-	"name": "mangoweb-sylius/payment-fee-plugin",
+	"name": "mangoweb-sylius/sylius-payment-fee-plugin",
 	"type": "sylius-plugin",
 	"description": "Payment fee plugin for Sylius.",
 	"license": "proprietary",
