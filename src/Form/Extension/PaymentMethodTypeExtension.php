@@ -43,7 +43,7 @@ class PaymentMethodTypeExtension extends AbstractTypeExtension
 		$builder
 			->addEventSubscriber(new AddCodeFormSubscriber())
 			->add('calculator', CalculatorChoiceType::class, [
-				'label' => 'sylius.form.payment_method.calculator',
+				'label' => 'mango-sylius.form.payment_method.calculator',
 			]
 			)->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
 				$method = $event->getData();
